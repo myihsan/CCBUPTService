@@ -50,9 +50,4 @@ public class Notice {
     public void setDateTime(String dateTime) {
         mDateTime = dateTime;
     }
-
-    @Override
-    public String toString() {
-        return mTitle;
-    }
 }

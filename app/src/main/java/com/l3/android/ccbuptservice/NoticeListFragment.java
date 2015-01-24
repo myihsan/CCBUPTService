@@ -5,7 +5,10 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.TextView;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -27,8 +30,7 @@ public class NoticeListFragment extends ListFragment {
     }
 
     public void setupAdapter() {
-        ArrayAdapter<Notice> adapter = new ArrayAdapter<Notice>(getActivity(),
-                android.R.layout.simple_list_item_1, mNotices);
+        NoticeAdapter adapter = new NoticeAdapter(mNotices);
         setListAdapter(adapter);
     }
 
@@ -42,6 +44,35 @@ public class NoticeListFragment extends ListFragment {
         protected void onPostExecute(ArrayList<Notice> notices) {
             mNotices = notices;
             setupAdapter();
+        }
+    }
+
+    public class NoticeAdapter extends ArrayAdapter<Notice> {
+
+        public NoticeAdapter(ArrayList<Notice> notices) {
+            super(getActivity(), 0, notices);
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            // If we weren't given a view, inflate one
+            if (convertView==null){
+                convertView = getActivity().getLayoutInflater()
+                        .inflate(R.layout.list_item_notice,null);
+            }
+
+            // Configure the view for this notice
+            Notice notice = getItem(position);
+
+            TextView titleTextView =
+                    (TextView)convertView.findViewById(R.id.notice_list_item_titleTextView);
+            titleTextView.setText(notice.getTitle());
+
+            TextView dateTimeTextView =
+                    (TextView)convertView.findViewById(R.id.notice_list_item_dateTimeTextView);
+            dateTimeTextView.setText(notice.getDateTime());
+
+            return convertView;
         }
     }
 }
