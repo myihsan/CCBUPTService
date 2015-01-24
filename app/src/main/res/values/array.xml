@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <string-array name="navigation_drawer_item">
+        <item>通知</item>
+        <item>设置</item>
+    </string-array>
+    <string-array name="department_options">
+        <item>计算机科学与技术系</item>
+        <item>经济管理系</item>
+        <item>艺术与传媒学院</item>
+        <item>外语系</item>
+        <item>通信与信息工程系</item>
+        <item>电子与自动化系</item>
+    </string-array>
+</resources>
