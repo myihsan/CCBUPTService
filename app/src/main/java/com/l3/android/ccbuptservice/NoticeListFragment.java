@@ -1,6 +1,7 @@
 package com.l3.android.ccbuptservice;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
@@ -8,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import java.io.IOException;
@@ -19,8 +21,6 @@ import java.util.ArrayList;
 public class NoticeListFragment extends ListFragment {
     private static final String TAG = "NoticeFragment";
 
-    ArrayList<Notice> mNotices;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,8 +30,16 @@ public class NoticeListFragment extends ListFragment {
     }
 
     public void setupAdapter() {
-        NoticeAdapter adapter = new NoticeAdapter(mNotices);
+        NoticeAdapter adapter = new NoticeAdapter(NoticeArray.get(getActivity()).getNotices());
         setListAdapter(adapter);
+    }
+
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        Intent intent = new Intent(getActivity(), NoticeActivity.class);
+        Notice notice = ((NoticeAdapter) getListAdapter()).getItem(position);
+        intent.putExtra(NoticeFragment.EXTRA_NOTICE_ID, notice.getId());
+        startActivity(intent);
     }
 
     private class FetchNoticeTask extends AsyncTask<Void, Void, ArrayList<Notice>> {
@@ -42,7 +50,7 @@ public class NoticeListFragment extends ListFragment {
 
         @Override
         protected void onPostExecute(ArrayList<Notice> notices) {
-            mNotices = notices;
+            NoticeArray.get(getActivity()).addNotices(0, notices);
             setupAdapter();
         }
     }
@@ -56,20 +64,20 @@ public class NoticeListFragment extends ListFragment {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             // If we weren't given a view, inflate one
-            if (convertView==null){
+            if (convertView == null) {
                 convertView = getActivity().getLayoutInflater()
-                        .inflate(R.layout.list_item_notice,null);
+                        .inflate(R.layout.list_item_notice, null);
             }
 
             // Configure the view for this notice
             Notice notice = getItem(position);
 
             TextView titleTextView =
-                    (TextView)convertView.findViewById(R.id.notice_list_item_titleTextView);
+                    (TextView) convertView.findViewById(R.id.notice_list_item_titleTextView);
             titleTextView.setText(notice.getTitle());
 
             TextView dateTimeTextView =
-                    (TextView)convertView.findViewById(R.id.notice_list_item_dateTimeTextView);
+                    (TextView) convertView.findViewById(R.id.notice_list_item_dateTimeTextView);
             dateTimeTextView.setText(notice.getDateTime());
 
             return convertView;

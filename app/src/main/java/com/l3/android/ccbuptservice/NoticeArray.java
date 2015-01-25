@@ -38,7 +38,7 @@ public class NoticeArray {
         return null;
     }
 
-    public void addNotices(ArrayList<Notice> notices){
-        mNotices.addAll(notices);
+    public void addNotices(int position, ArrayList<Notice> notices) {
+        mNotices.addAll(position, notices);
     }
 }
