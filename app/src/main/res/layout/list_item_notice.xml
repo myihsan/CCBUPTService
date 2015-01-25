@@ -14,7 +14,7 @@
         android:id="@+id/notice_list_item_titleTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="20sp"
+        android:textSize="16sp"
         tools:text="通知标题预览"
         android:textColor="@color/body_text_1"
         />
