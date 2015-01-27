@@ -46,8 +46,6 @@ public class MainActivity extends BaseActivity implements MaterialTabListener {
         Context context = getApplicationContext();
         XGPushManager.registerPush(context);
 
-        ActionBar actionBar = getSupportActionBar();
-
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());

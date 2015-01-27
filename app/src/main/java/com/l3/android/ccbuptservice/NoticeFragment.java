@@ -3,7 +3,9 @@ package com.l3.android.ccbuptservice;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.NavUtils;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -37,6 +39,7 @@ public class NoticeFragment extends Fragment {
         if (noticeId != -1) {
             mNotice = NoticeArray.get(getActivity()).getNotice(noticeId);
         }
+        setHasOptionsMenu(true);
     }
 
     @Nullable
@@ -52,5 +55,18 @@ public class NoticeFragment extends Fragment {
             mContentTextView.setText(mNotice.getContent());
         }
         return view;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                if (NavUtils.getParentActivityName(getActivity()) != null) {
+                    NavUtils.navigateUpFromSameTask(getActivity());
+                }
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

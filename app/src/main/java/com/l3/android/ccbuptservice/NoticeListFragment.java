@@ -19,7 +19,7 @@ import java.util.ArrayList;
  * Created by Ihsan on 15/1/23.
  */
 public class NoticeListFragment extends ListFragment {
-    private static final String TAG = "NoticeFragment";
+    private static final String TAG = "NoticeListFragment";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

@@ -55,7 +55,6 @@ public class NoticeFetcher {
             String jsonString = getUrl(url);
             Log.i(TAG, jsonString);
             parseNotices(notices, jsonString);
-            Log.d(TAG,notices.get(0).getContent()+notices.get(1).getContent());
         } catch (IOException ioe) {
             Log.e(TAG, "Failed to fetch URL: ", ioe);
         } catch (JSONException jsone) {
