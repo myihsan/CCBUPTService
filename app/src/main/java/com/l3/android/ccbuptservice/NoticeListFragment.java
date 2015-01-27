@@ -1,18 +1,15 @@
 package com.l3.android.ccbuptservice;
 
-import android.app.Fragment;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -50,7 +47,7 @@ public class NoticeListFragment extends ListFragment {
 
         @Override
         protected void onPostExecute(ArrayList<Notice> notices) {
-            NoticeArray.get(getActivity()).addNotices(0, notices);
+            NoticeArray.get(getActivity()).refreshNotices(0, notices);
             setupAdapter();
         }
     }
