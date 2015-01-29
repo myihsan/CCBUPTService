@@ -1,8 +1,10 @@
 package com.l3.android.ccbuptservice;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.ListFragment;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,8 +24,6 @@ public class NoticeListFragment extends ListFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         new FetchNoticeTask().execute();
-
-
     }
 
     public void setupAdapter() {
@@ -42,7 +42,15 @@ public class NoticeListFragment extends ListFragment {
     private class FetchNoticeTask extends AsyncTask<Void, Void, ArrayList<Notice>> {
         @Override
         protected ArrayList<Notice> doInBackground(Void... params) {
-            return new NoticeFetcher().fetchNotice();
+            SharedPreferences preferences = PreferenceManager
+                    .getDefaultSharedPreferences(getActivity());
+            String specialty;
+            if (preferences.contains("specialty")
+                    &&(specialty=preferences.getString("specialty",null).toString())!=null){
+                return new NoticeFetcher().fetchNoticeBySpecialty(specialty);
+            }else {
+                return new NoticeFetcher().fetchNotice();
+            }
         }
 
         @Override

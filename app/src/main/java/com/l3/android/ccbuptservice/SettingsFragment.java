@@ -7,24 +7,24 @@ import android.preference.PreferenceFragment;
 import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
 
-//import com.tencent.android.tpush.XGPushManager;
+import com.tencent.android.tpush.XGPushManager;
 
 public class SettingsFragment extends PreferenceFragment implements
         Preference.OnPreferenceChangeListener {
-    private ListPreference department;
-    private String oldDepartment;
+    private ListPreference specialty;
+    private String oldSpecialty;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         addPreferencesFromResource(R.xml.fragment_settings);
-        department = (ListPreference) findPreference("department");
-        oldDepartment = department.getValue();
-        if (oldDepartment != null) {
-            department.setSummary(oldDepartment);
+        specialty = (ListPreference) findPreference("specialty");
+        oldSpecialty = specialty.getValue();
+        if (oldSpecialty != null) {
+            specialty.setSummary(oldSpecialty);
         }
-        department.setOnPreferenceChangeListener(this);
+        specialty.setOnPreferenceChangeListener(this);
     }
 
     @Override
@@ -42,16 +42,14 @@ public class SettingsFragment extends PreferenceFragment implements
 
     @Override
     public boolean onPreferenceChange(Preference preference, Object objValue) {
-        if (preference == department) {
-            String newDepartment = String.valueOf(objValue);
-//			Toast.makeText(getActivity(), String.valueOf(objValue)+":"+oldDepartment,
-//					Toast.LENGTH_SHORT).show();
-            department.setSummary(newDepartment);
-            if (oldDepartment != null) {
-//				XGPushManager.deleteTag(getActivity().getApplicationContext(), oldDepartment);
+        if (preference == specialty) {
+            String newSpecialty = String.valueOf(objValue);
+            specialty.setSummary(newSpecialty);
+            if (oldSpecialty != null) {
+				XGPushManager.deleteTag(getActivity().getApplicationContext(), oldSpecialty);
             }
-//			XGPushManager.setTag(getActivity().getApplicationContext(), newDepartment);
-            oldDepartment = newDepartment;
+			XGPushManager.setTag(getActivity().getApplicationContext(), newSpecialty);
+            oldSpecialty = newSpecialty;
         }
         return true;
     }

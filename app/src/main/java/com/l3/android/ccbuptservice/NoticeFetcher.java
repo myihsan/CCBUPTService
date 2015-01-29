@@ -1,5 +1,7 @@
 package com.l3.android.ccbuptservice;
 
+import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -51,6 +53,26 @@ public class NoticeFetcher {
         ArrayList<Notice> notices = new ArrayList<Notice>();
 
         String url = "http://10.168.1.124/CCBUPTService/notice.php";
+        try {
+            String jsonString = getUrl(url);
+            Log.i(TAG, jsonString);
+            parseNotices(notices, jsonString);
+        } catch (IOException ioe) {
+            Log.e(TAG, "Failed to fetch URL: ", ioe);
+        } catch (JSONException jsone) {
+            Log.e(TAG, "Failed to parse notices", jsone);
+        }
+        return notices;
+    }
+
+    public ArrayList<Notice> fetchNoticeBySpecialty(String specialty) {
+        ArrayList<Notice> notices = new ArrayList<Notice>();
+
+        String fetchUrl = "http://10.168.1.124/CCBUPTService/notice.php";
+        String url = Uri.parse(fetchUrl).buildUpon()
+                .appendQueryParameter("specialty", String.valueOf(specialty))
+                .build().toString();
+        Log.d(TAG,url);
         try {
             String jsonString = getUrl(url);
             Log.i(TAG, jsonString);

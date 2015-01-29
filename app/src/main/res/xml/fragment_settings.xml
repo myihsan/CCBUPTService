@@ -4,9 +4,9 @@
     <ListPreference
         android:entries="@array/department_options"
         android:entryValues="@array/department_options"
-        android:key="department"
+        android:key="specialty"
         android:persistent="true"
-        android:title="院系" 
-        android:summary="未选择院系无法收到针对院系的通知"/>
+        android:title="专业"
+        android:summary="未选择专业无法收到针对院系的通知"/>
 
 </PreferenceScreen>
