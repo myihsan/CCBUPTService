@@ -13,4 +13,9 @@
         <item>通信与信息工程系</item>
         <item>电子与自动化系</item>
     </string-array>
+
+
+    <integer-array name="header_colors">
+        <item>@color/primary</item>
+    </integer-array>
 </resources>

@@ -5,38 +5,96 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.ListFragment;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import in.srain.cube.views.ptr.PtrFrameLayout;
+import in.srain.cube.views.ptr.PtrHandler;
+import in.srain.cube.views.ptr.header.MaterialHeader;
+
 /**
  * Created by Ihsan on 15/1/23.
  */
-public class NoticeListFragment extends ListFragment {
+public class NoticeListFragment extends Fragment {
     private static final String TAG = "NoticeListFragment";
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        new FetchNoticeTask().execute();
-    }
+    private ListView mListView;
+    private PtrFrameLayout mFrame;
 
-    public void setupAdapter() {
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        View view = inflater.inflate(R.layout.fragment_notice_list, container, false);
+        mListView = (ListView) view.findViewById(R.id.notice_list_listView);
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getActivity(), NoticeActivity.class);
+                Notice notice = ((NoticeAdapter) mListView.getAdapter()).getItem(position);
+                intent.putExtra(NoticeFragment.EXTRA_NOTICE_ID, notice.getId());
+                startActivity(intent);
+            }
+        });
         NoticeAdapter adapter = new NoticeAdapter(NoticeArray.get(getActivity()).getNotices());
-        setListAdapter(adapter);
+        mListView.setAdapter(adapter);
+
+        mFrame = (PtrFrameLayout) view.findViewById(R.id.material_style_ptr_frame);
+
+        // header
+        final MaterialHeader header = new MaterialHeader(getActivity());
+        int[] colors = getResources().getIntArray(R.array.header_colors);
+        header.setColorSchemeColors(colors);
+        header.setLayoutParams(new PtrFrameLayout.LayoutParams(-1, -2));
+        header.setPadding(0, DisplayUtil.dp2px(getActivity(), 10), 0, DisplayUtil.dp2px(getActivity(), 10));
+        header.setPtrFrameLayout(mFrame);
+
+        mFrame.setLoadingMinTime(1000);
+        mFrame.setDurationToCloseHeader(1000);
+        mFrame.setHeaderView(header);
+        mFrame.addPtrUIHandler(header);
+        mFrame.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mFrame.autoRefresh(false);
+            }
+        }, 100);
+
+        mFrame.setPtrHandler(new PtrHandler() {
+            @Override
+            public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
+                return true;
+            }
+
+            @Override
+            public void onRefreshBegin(final PtrFrameLayout frame) {
+                new FetchNoticeTask().execute();
+            }
+        });
+
+        new FetchNoticeTask().execute();
+        return view;
     }
 
     @Override
-    public void onListItemClick(ListView l, View v, int position, long id) {
-        Intent intent = new Intent(getActivity(), NoticeActivity.class);
-        Notice notice = ((NoticeAdapter) getListAdapter()).getItem(position);
-        intent.putExtra(NoticeFragment.EXTRA_NOTICE_ID, notice.getId());
-        startActivity(intent);
+    public void onResume() {
+        super.onResume();
+        if (mListView != null) {
+            mFrame.autoRefresh(false);
+        }
+    }
+
+    public void updateAdapter() {
+        ((NoticeAdapter) mListView.getAdapter()).notifyDataSetChanged();
     }
 
     private class FetchNoticeTask extends AsyncTask<Void, Void, ArrayList<Notice>> {
@@ -46,17 +104,19 @@ public class NoticeListFragment extends ListFragment {
                     .getDefaultSharedPreferences(getActivity());
             String specialty;
             if (preferences.contains("specialty")
-                    &&(specialty=preferences.getString("specialty",null).toString())!=null){
+                    && (specialty = preferences.getString("specialty", null).toString()) != null) {
                 return new NoticeFetcher().fetchNoticeBySpecialty(specialty);
-            }else {
+            } else {
                 return new NoticeFetcher().fetchNotice();
             }
         }
 
         @Override
         protected void onPostExecute(ArrayList<Notice> notices) {
+            mFrame.refreshComplete();
+
             NoticeArray.get(getActivity()).refreshNotices(0, notices);
-            setupAdapter();
+            updateAdapter();
         }
     }
 

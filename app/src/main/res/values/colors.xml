@@ -13,4 +13,9 @@
     <color name="body_text_1">#de000000</color>
     <color name="caption_text">#8a000000</color>
 
+    <color name="google_red">#FFC93437</color>
+    <color name="google_blue">#FF375BF1</color>
+    <color name="google_yellow">#FFF7D23E</color>
+    <color name="google_green">#FF34A350</color>
+
 </resources>
