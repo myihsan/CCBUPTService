@@ -2,6 +2,8 @@ package com.l3.android.ccbuptservice;
 
 import android.app.Fragment;
 
+import com.tencent.android.tpush.XGPushManager;
+
 /**
  * Created by Ihsan on 15/1/25.
  */

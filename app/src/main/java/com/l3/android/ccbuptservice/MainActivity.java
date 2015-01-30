@@ -89,24 +89,6 @@ public class MainActivity extends BaseActivity implements MaterialTabListener {
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-
-        XGPushClickedResult clickedResult = XGPushManager.onActivityStarted(this);
-        if (clickedResult != null) {
-            String customContent = clickedResult.getCustomContent();
-            if (customContent != null & customContent.length() != 0) {
-                try {
-                    JSONObject jsonObject = new JSONObject(customContent);
-                    Log.d(TAG,jsonObject.toString());
-                } catch (JSONException jsone){
-                    Log.e(TAG,"Failed to parse custom content", jsone);
-                }
-            }
-        }
-    }
-
-    @Override
     public void onTabSelected(MaterialTab materialTab) {
         // when the tab is clicked the pager swipe content to the tab position
         mTabHost.setSelectedNavigationItem(materialTab.getPosition());
