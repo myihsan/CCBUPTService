@@ -10,14 +10,19 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.tencent.android.tpush.XGPushClickedResult;
 import com.tencent.android.tpush.XGPushConfig;
 import com.tencent.android.tpush.XGPushManager;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import it.neokree.materialtabs.MaterialTab;
 import it.neokree.materialtabs.MaterialTabHost;
@@ -25,6 +30,7 @@ import it.neokree.materialtabs.MaterialTabListener;
 
 
 public class MainActivity extends BaseActivity implements MaterialTabListener {
+    private static final String TAG = "MainActivity";
 
     SectionsPagerAdapter mSectionsPagerAdapter;
     ViewPager mViewPager;
@@ -80,6 +86,24 @@ public class MainActivity extends BaseActivity implements MaterialTabListener {
             );
         }
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        XGPushClickedResult clickedResult = XGPushManager.onActivityStarted(this);
+        if (clickedResult != null) {
+            String customContent = clickedResult.getCustomContent();
+            if (customContent != null & customContent.length() != 0) {
+                try {
+                    JSONObject jsonObject = new JSONObject(customContent);
+                    Log.d(TAG,jsonObject.toString());
+                } catch (JSONException jsone){
+                    Log.e(TAG,"Failed to parse custom content", jsone);
+                }
+            }
+        }
     }
 
     @Override
@@ -157,7 +181,7 @@ public class MainActivity extends BaseActivity implements MaterialTabListener {
                 case 0:
                     return "通知";
                 case 1:
-                    return getString(R.string.title_section2).toUpperCase(l);
+                    return "排队";
             }
             return null;
         }
