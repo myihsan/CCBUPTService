@@ -4,6 +4,7 @@ import java.util.Locale;
 
 import android.content.Context;
 import android.content.Intent;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -17,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.tencent.android.tpush.XGIOperateCallback;
 import com.tencent.android.tpush.XGPushClickedResult;
 import com.tencent.android.tpush.XGPushConfig;
 import com.tencent.android.tpush.XGPushManager;
@@ -50,7 +52,25 @@ public class MainActivity extends BaseActivity implements MaterialTabListener {
         // 具体可参考详细的开发指南
         // 传递的参数为ApplicationContext
         Context context = getApplicationContext();
-        XGPushManager.registerPush(context);
+        boolean xgIsRegistered = PreferenceManager.getDefaultSharedPreferences(this)
+                .getBoolean(getString(R.string.xg_is_registered), false);
+        if (!xgIsRegistered) {
+            XGPushManager.registerPush(context, new XGIOperateCallback() {
+                @Override
+                public void onSuccess(Object data, int flag) {
+                    PreferenceManager.getDefaultSharedPreferences(MainActivity.this)
+                            .edit()
+                            .putBoolean(getString(R.string.xg_is_registered), true)
+                            .commit();
+                    Log.d("TPush", "注册成功，设备token为：" + data);
+                }
+
+                @Override
+                public void onFail(Object data, int errCode, String msg) {
+                    Log.d("TPush", "注册失败，错误码：" + errCode + ",错误信息：" + msg);
+                }
+            });
+        }
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.

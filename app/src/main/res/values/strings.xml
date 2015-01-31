@@ -2,8 +2,8 @@
 <resources>
 
     <string name="app_name">CCBUPTService</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
-    <string name="title_setting">Settings</string>
+    <string name="action_settings">设置</string>
+    <string name="title_setting">设置</string>
+    <string name="xg_is_registered">xgIsRegistered</string>
 
 </resources>
