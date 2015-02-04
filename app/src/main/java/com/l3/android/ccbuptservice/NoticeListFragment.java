@@ -90,6 +90,7 @@ public class NoticeListFragment extends Fragment {
     public void onResume() {
         super.onResume();
         if (mListView != null) {
+            mListView.setStackFromBottom(false);
             mFrame.autoRefresh(false);
         }
     }
