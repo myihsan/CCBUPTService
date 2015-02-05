@@ -5,5 +5,7 @@
     <string name="action_settings">设置</string>
     <string name="title_setting">设置</string>
     <string name="xg_is_registered">xgIsRegistered</string>
+    <string name="queue_now_label">当前</string>
+    <string name="queue_total_label">排队人数</string>
 
 </resources>

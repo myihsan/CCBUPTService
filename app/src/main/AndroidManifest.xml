@@ -56,6 +56,13 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity"/>
         </activity>
+        <activity
+            android:name=".QueueDetailActivity"
+            android:parentActivityName=".QueueListActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".QueueListActivity"/>
+        </activity>
 
         <activity
             android:name="com.tencent.android.tpush.XGPushActivity"

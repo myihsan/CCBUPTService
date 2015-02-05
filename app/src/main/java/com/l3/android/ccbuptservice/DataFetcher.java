@@ -45,7 +45,7 @@ public class DataFetcher {
         }
     }
 
-    private String getUrl(String urlSpec) throws IOException {
+    public String getUrl(String urlSpec) throws IOException {
         return new String(getUrlBytes(urlSpec));
     }
 
