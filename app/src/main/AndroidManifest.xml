@@ -49,13 +49,20 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity"/>
         </activity>
+        <activity
+            android:name=".QueueListActivity"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity"/>
+        </activity>
 
         <activity
             android:name="com.tencent.android.tpush.XGPushActivity"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
                 <!-- 若使用AndroidStudio，请设置android:name="android.intent.action"-->
-                <action android:name="android.intent.action" />
+                <action android:name="android.intent.action"/>
             </intent-filter>
         </activity>
 
@@ -88,7 +95,7 @@
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
 
                 <!-- 【可选】 一些常用的系统广播，增强信鸽service的复活机会，请根据需要选择。当然，你也可以添加APP自定义的一些广播让启动service -->
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
                 <action android:name="android.bluetooth.adapter.action.STATE_CHANGED"/>
                 <action android:name="android.intent.action.ACTION_POWER_CONNECTED"/>
                 <action android:name="android.intent.action.ACTION_POWER_DISCONNECTED"/>

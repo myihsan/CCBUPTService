@@ -18,8 +18,8 @@ import java.util.ArrayList;
 /**
  * Created by Ihsan on 15/1/23.
  */
-public class NoticeFetcher {
-    private static final String TAG = "NoticeFetcher";
+public class DataFetcher {
+    private static final String TAG = "DataFetcher";
 
     private byte[] getUrlBytes(String urlSpec) throws IOException {
         URL url = new URL(urlSpec);
@@ -90,6 +90,32 @@ public class NoticeFetcher {
         for (int i = 0; i < itemsArray.length(); i++) {
             Notice notice = new Notice(itemsArray.getJSONObject(i));
             notices.add(notice);
+        }
+    }
+
+    public ArrayList<Queue> fetchQueue() {
+        ArrayList<Queue> queues = new ArrayList<Queue>();
+
+        String fetchUrl = "http://10.168.1.124/CCBUPTService/queue.php";
+        String url = Uri.parse(fetchUrl).buildUpon().build().toString();
+        Log.d(TAG,url);
+        try {
+            String jsonString = getUrl(url);
+            Log.i(TAG, jsonString);
+            parseQueues(queues, jsonString);
+        } catch (IOException ioe) {
+            Log.e(TAG, "Failed to fetch URL: ", ioe);
+        } catch (JSONException jsone) {
+            Log.e(TAG, "Failed to parse notices", jsone);
+        }
+        return queues;
+    }
+
+    private void parseQueues(ArrayList<Queue> queues, String jsonString) throws JSONException, IOException {
+        JSONArray itemsArray = new JSONArray(jsonString);
+        for (int i = 0; i < itemsArray.length(); i++) {
+            Queue queue = new Queue(itemsArray.getJSONObject(i));
+            queues.add(queue);
         }
     }
 }

@@ -49,7 +49,7 @@ public class NoticeListFragment extends Fragment {
         NoticeAdapter adapter = new NoticeAdapter(NoticeArray.get(getActivity()).getNotices());
         mListView.setAdapter(adapter);
 
-        mFrame = (PtrFrameLayout) view.findViewById(R.id.material_style_ptr_frame);
+        mFrame = (PtrFrameLayout) view.findViewById(R.id.notice_list_material_style_ptr_frame);
 
         // header
         final MaterialHeader header = new MaterialHeader(getActivity());
@@ -107,9 +107,9 @@ public class NoticeListFragment extends Fragment {
             String specialty;
             if (preferences.contains("specialty")
                     && (specialty = preferences.getString("specialty", null).toString()) != null) {
-                return new NoticeFetcher().fetchNoticeBySpecialty(specialty);
+                return new DataFetcher().fetchNoticeBySpecialty(specialty);
             } else {
-                return new NoticeFetcher().fetchNotice();
+                return new DataFetcher().fetchNotice();
             }
         }
 
