@@ -82,7 +82,7 @@ public class NoticeListFragment extends Fragment {
             }
         });
 
-        new FetchNoticeTask().execute();
+//        new FetchNoticeTask().execute();
         return view;
     }
 
@@ -91,7 +91,12 @@ public class NoticeListFragment extends Fragment {
         super.onResume();
         if (mListView != null) {
             mListView.setStackFromBottom(false);
-            mFrame.autoRefresh(false);
+            mFrame.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mFrame.autoRefresh(true);
+                }
+            }, 150);
         }
     }
 
