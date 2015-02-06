@@ -7,5 +7,8 @@
     <string name="xg_is_registered">xgIsRegistered</string>
     <string name="queue_now_label">当前</string>
     <string name="queue_total_label">排队人数</string>
+    <string name="queue_up_button">加入队列</string>
+    <string name="queued_number">queuedNumber</string>
+    <string name="queued_queue">queuedQueue</string>
 
 </resources>

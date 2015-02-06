@@ -1,5 +1,6 @@
 package com.l3.android.ccbuptservice;
 
+import android.app.Activity;
 import android.app.ListFragment;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -34,6 +35,13 @@ public class QueueListFragment extends ListFragment {
         int queueId = ((QueueAdapter) getListAdapter()).getItem(position).getId();
         intent.putExtra(QueueDetailFragment.EXTRA_QUEUE_ID, queueId);
         startActivityForResult(intent, QUEUE_DETAIL);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == Activity.RESULT_OK) {
+            getActivity().finish();
+        }
     }
 
     public void updateAdapter() {
