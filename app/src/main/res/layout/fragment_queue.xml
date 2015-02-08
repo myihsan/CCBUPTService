@@ -22,12 +22,24 @@
             android:orientation="vertical"
             android:padding="16dp">
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/queue_my_number"
-                android:textSize="20sp"/>
-
+                android:textSize="20sp"
+                android:layout_centerVertical="true"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/quit_queue"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:id="@+id/queue_quit_queue_button"/>
+        </RelativeLayout>
             <TextView
                 android:id="@+id/queue_my_number_textView"
                 android:layout_width="wrap_content"

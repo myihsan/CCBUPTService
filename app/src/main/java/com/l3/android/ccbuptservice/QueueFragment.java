@@ -12,8 +12,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.melnykov.fab.FloatingActionButton;
 import com.tencent.android.tpush.XGPushConfig;
@@ -30,6 +32,7 @@ public class QueueFragment extends Fragment {
     private LinearLayout mQueuedLinearLayout;
     private TextView mMyNumberTextView, mMyIdentificationTextView, mQueueNowTextView;
     private FloatingActionButton mFAButton;
+    private Button mQuitButton;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -40,6 +43,13 @@ public class QueueFragment extends Fragment {
         mMyIdentificationTextView = (TextView) view.findViewById(R.id.queue_my_identification);
         mQueueNowTextView = (TextView) view.findViewById(R.id.queue_now_textView);
         mFAButton = (FloatingActionButton) view.findViewById(R.id.notice_list_fab);
+        mQuitButton = (Button) view.findViewById(R.id.queue_quit_queue_button);
+        mQuitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new QuitQueueTask().execute();
+            }
+        });
 
         mFAButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,7 +72,7 @@ public class QueueFragment extends Fragment {
             mFAButton.setVisibility(View.INVISIBLE);
             mQueuedLinearLayout.setVisibility(View.VISIBLE);
             mMyNumberTextView.setText(String.valueOf(
-                    pre.getInt(getString(R.string.queued_queue), -1)));
+                    pre.getInt(getString(R.string.queued_number), -1)));
             mMyIdentificationTextView.setText(XGPushConfig.getToken(getActivity()));
             new getNowQueuerTask().execute();
         }
@@ -89,7 +99,7 @@ public class QueueFragment extends Fragment {
             } catch (IOException ioe) {
                 Log.e(TAG, "Failed to fetch URL: ", ioe);
                 return -1;
-            } catch (NumberFormatException nfe){
+            } catch (NumberFormatException nfe) {
                 return -1;
             }
         }
@@ -110,5 +120,47 @@ public class QueueFragment extends Fragment {
         }
     }
 
+    private class QuitQueueTask extends AsyncTask<Void, Void, Boolean> {
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            boolean flag=false;
+            int queueId=PreferenceManager
+                    .getDefaultSharedPreferences(getActivity())
+                    .getInt(getString(R.string.queued_queue),-1);
+            int number=Integer.valueOf(mMyNumberTextView.getText().toString());
+            String token=XGPushConfig.getToken(getActivity());
+            String fetchUrl = "http://10.168.1.124/CCBUPTService/quitqueue.php";
+            String url = Uri.parse(fetchUrl).buildUpon()
+                    .appendQueryParameter("queueId", String.valueOf(queueId))
+                    .appendQueryParameter("number", String.valueOf(number))
+                    .appendQueryParameter("token", token)
+                    .build().toString();
+            Log.d(TAG,url);
+            try {
+                String result = new DataFetcher().getUrl(url);
+                Log.d(TAG, result);
+                if (result.equals("succeed")) {
+                    flag = true;
+                }
+            } catch (IOException ioe) {
+                Log.e(TAG, "Failed to fetch URL: ", ioe);
+            }
+            return flag;
+        }
 
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            if (aBoolean){
+                PreferenceManager.getDefaultSharedPreferences(getActivity())
+                        .edit()
+                        .remove(getString(R.string.queued_queue))
+                        .remove(getString(R.string.queued_number))
+                        .commit();
+                mQueuedLinearLayout.setVisibility(View.INVISIBLE);
+                mFAButton.setVisibility(View.VISIBLE);
+            }else {
+                Toast.makeText(getActivity(), "处理失败，请重试", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
 }
