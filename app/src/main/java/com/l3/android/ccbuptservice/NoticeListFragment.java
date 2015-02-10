@@ -112,9 +112,9 @@ public class NoticeListFragment extends Fragment {
             String specialty;
             if (preferences.contains("specialty")
                     && (specialty = preferences.getString("specialty", null).toString()) != null) {
-                return new DataFetcher().fetchNoticeBySpecialty(specialty);
+                return new DataFetcher(getActivity()).fetchNoticeBySpecialty(specialty);
             } else {
-                return new DataFetcher().fetchNotice();
+                return new DataFetcher(getActivity()).fetchNotice();
             }
         }
 

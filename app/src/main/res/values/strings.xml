@@ -13,5 +13,6 @@
     <string name="queue_my_number">我的编号</string>
     <string name="queue_identification">识别码</string>
     <string name="quit_queue">退出队列</string>
+    <string name="root_url">http://10.168.1.124/CCBUPTService/</string>
 
 </resources>

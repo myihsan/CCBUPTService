@@ -86,7 +86,7 @@ public class QueueDetailFragment extends Fragment {
                 .appendQueryParameter("token", token)
                 .build().toString();
         try {
-            String result = new DataFetcher().getUrl(url);
+            String result = new DataFetcher(getActivity()).getUrl(url);
             Log.d(TAG, result);
             return Integer.valueOf(result);
         } catch (IOException ioe) {
@@ -106,7 +106,7 @@ public class QueueDetailFragment extends Fragment {
                     .appendQueryParameter("queueId", String.valueOf(mQueue.getId()))
                     .build().toString();
             try {
-                String result = new DataFetcher().getUrl(url);
+                String result = new DataFetcher(getActivity()).getUrl(url);
                 JSONObject jsonObject = new JSONObject(result);
                 mQueue.setNextNumber(jsonObject.getInt("nextNumber"));
                 mQueue.setTotal(jsonObject.getInt("total"));

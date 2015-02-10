@@ -51,7 +51,7 @@ public class QueueListFragment extends ListFragment {
     private class FetchQueueTask extends AsyncTask<Void, Void, ArrayList<Queue>> {
         @Override
         protected ArrayList<Queue> doInBackground(Void... params) {
-            return new DataFetcher().fetchQueue();
+            return new DataFetcher(getActivity()).fetchQueue();
         }
 
         @Override

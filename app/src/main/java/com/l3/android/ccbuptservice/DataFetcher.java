@@ -1,5 +1,6 @@
 package com.l3.android.ccbuptservice;
 
+import android.content.Context;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -20,6 +21,11 @@ import java.util.ArrayList;
  */
 public class DataFetcher {
     private static final String TAG = "DataFetcher";
+    private Context mContext;
+
+    public DataFetcher(Context context){
+        mContext=context;
+    }
 
     private byte[] getUrlBytes(String urlSpec) throws IOException {
         URL url = new URL(urlSpec);
@@ -52,7 +58,7 @@ public class DataFetcher {
     public ArrayList<Notice> fetchNotice() {
         ArrayList<Notice> notices = new ArrayList<Notice>();
 
-        String url = "http://10.168.1.124/CCBUPTService/notice.php";
+        String url = mContext.getString(R.string.root_url)+"notice.php";
         try {
             String jsonString = getUrl(url);
             Log.i(TAG, jsonString);
@@ -68,7 +74,7 @@ public class DataFetcher {
     public ArrayList<Notice> fetchNoticeBySpecialty(String specialty) {
         ArrayList<Notice> notices = new ArrayList<Notice>();
 
-        String fetchUrl = "http://10.168.1.124/CCBUPTService/notice.php";
+        String fetchUrl = mContext.getString(R.string.root_url)+"notice.php";
         String url = Uri.parse(fetchUrl).buildUpon()
                 .appendQueryParameter("specialty", String.valueOf(specialty))
                 .build().toString();
@@ -96,7 +102,7 @@ public class DataFetcher {
     public ArrayList<Queue> fetchQueue() {
         ArrayList<Queue> queues = new ArrayList<Queue>();
 
-        String fetchUrl = "http://10.168.1.124/CCBUPTService/queue.php";
+        String fetchUrl = mContext.getString(R.string.root_url)+"queue.php";
         String url = Uri.parse(fetchUrl).buildUpon().build().toString();
         Log.d(TAG,url);
         try {
