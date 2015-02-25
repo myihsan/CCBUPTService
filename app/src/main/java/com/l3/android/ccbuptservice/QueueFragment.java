@@ -88,7 +88,7 @@ public class QueueFragment extends Fragment {
                 .getInt(getString(R.string.queued_queue), -1);
         if (queueId != -1) {
             String result = null;
-            String fetchUrl = "http://10.168.1.124/CCBUPTService/getnowqueuer.php";
+            String fetchUrl = getString(R.string.root_url) + "getnowqueuer.php";
             String url = Uri.parse(fetchUrl).buildUpon()
                     .appendQueryParameter("queueId", String.valueOf(queueId))
                     .build().toString();
@@ -123,19 +123,19 @@ public class QueueFragment extends Fragment {
     private class QuitQueueTask extends AsyncTask<Void, Void, Boolean> {
         @Override
         protected Boolean doInBackground(Void... params) {
-            boolean flag=false;
-            int queueId=PreferenceManager
+            boolean flag = false;
+            int queueId = PreferenceManager
                     .getDefaultSharedPreferences(getActivity())
-                    .getInt(getString(R.string.queued_queue),-1);
-            int number=Integer.valueOf(mMyNumberTextView.getText().toString());
-            String token=XGPushConfig.getToken(getActivity());
-            String fetchUrl = "http://10.168.1.124/CCBUPTService/quitqueue.php";
+                    .getInt(getString(R.string.queued_queue), -1);
+            int number = Integer.valueOf(mMyNumberTextView.getText().toString());
+            String token = XGPushConfig.getToken(getActivity());
+            String fetchUrl = getString(R.string.root_url) + "quitqueue.php";
             String url = Uri.parse(fetchUrl).buildUpon()
                     .appendQueryParameter("queueId", String.valueOf(queueId))
                     .appendQueryParameter("number", String.valueOf(number))
                     .appendQueryParameter("token", token)
                     .build().toString();
-            Log.d(TAG,url);
+            Log.d(TAG, url);
             try {
                 String result = new DataFetcher(getActivity()).getUrl(url);
                 Log.d(TAG, result);
@@ -150,7 +150,7 @@ public class QueueFragment extends Fragment {
 
         @Override
         protected void onPostExecute(Boolean aBoolean) {
-            if (aBoolean){
+            if (aBoolean) {
                 PreferenceManager.getDefaultSharedPreferences(getActivity())
                         .edit()
                         .remove(getString(R.string.queued_queue))
@@ -158,7 +158,7 @@ public class QueueFragment extends Fragment {
                         .commit();
                 mQueuedLinearLayout.setVisibility(View.INVISIBLE);
                 mFAButton.setVisibility(View.VISIBLE);
-            }else {
+            } else {
                 Toast.makeText(getActivity(), "处理失败，请重试", Toast.LENGTH_LONG).show();
             }
         }

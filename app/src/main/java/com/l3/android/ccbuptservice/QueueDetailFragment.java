@@ -80,7 +80,7 @@ public class QueueDetailFragment extends Fragment {
     }
 
     private int queueUp(int queueId, String token) {
-        String fetchUrl = "http://10.168.1.124/CCBUPTService/queueup.php";
+        String fetchUrl = getString(R.string.root_url)+"queueup.php";
         String url = Uri.parse(fetchUrl).buildUpon()
                 .appendQueryParameter("queueId", String.valueOf(queueId))
                 .appendQueryParameter("token", token)
@@ -101,7 +101,7 @@ public class QueueDetailFragment extends Fragment {
         @Override
         protected Void doInBackground(Void... params) {
 
-            String fetchUrl = "http://10.168.1.124/CCBUPTService/getqueuedetail.php";
+            String fetchUrl = getString(R.string.root_url)+"getqueuedetail.php";
             String url = Uri.parse(fetchUrl).buildUpon()
                     .appendQueryParameter("queueId", String.valueOf(mQueue.getId()))
                     .build().toString();
