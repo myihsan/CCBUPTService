@@ -80,7 +80,7 @@ public class QueueDetailFragment extends Fragment {
     }
 
     private int queueUp(int queueId, String token) {
-        String fetchUrl = getString(R.string.root_url)+"queueup.php";
+        String fetchUrl = getString(R.string.root_url) + "queueup.php";
         String url = Uri.parse(fetchUrl).buildUpon()
                 .appendQueryParameter("queueId", String.valueOf(queueId))
                 .appendQueryParameter("token", token)
@@ -97,31 +97,20 @@ public class QueueDetailFragment extends Fragment {
         return -1;
     }
 
-    private class GetDetailTask extends AsyncTask<Void, Void, Void> {
+    private class GetDetailTask extends AsyncTask<Void, Void, Boolean> {
         @Override
-        protected Void doInBackground(Void... params) {
-
-            String fetchUrl = getString(R.string.root_url)+"getqueuedetail.php";
-            String url = Uri.parse(fetchUrl).buildUpon()
-                    .appendQueryParameter("queueId", String.valueOf(mQueue.getId()))
-                    .build().toString();
-            try {
-                String result = new DataFetcher(getActivity()).getUrl(url);
-                JSONObject jsonObject = new JSONObject(result);
-                mQueue.setNextNumber(jsonObject.getInt("nextNumber"));
-                mQueue.setTotal(jsonObject.getInt("total"));
-            } catch (IOException ioe) {
-                Log.e(TAG, "Failed to fetch URL: ", ioe);
-            } catch (JSONException jsone) {
-                Log.e(TAG, "Failed to parse detail", jsone);
-            }
-            return null;
+        protected Boolean doInBackground(Void... params) {
+            return new DataFetcher(getActivity()).fetchQueueDetail(mQueue);
         }
 
         @Override
-        protected void onPostExecute(Void aVoid) {
-            mNowTextView.setText(String.valueOf(mQueue.getNextNumber()));
-            mTotalTextView.setText(String.valueOf(mQueue.getTotal()));
+        protected void onPostExecute(Boolean aBoolean) {
+            if (aBoolean) {
+                mNowTextView.setText(String.valueOf(mQueue.getNextNumber()));
+                mTotalTextView.setText(String.valueOf(mQueue.getTotal()));
+            } else {
+                Toast.makeText(getActivity(), "获取队列信息失败，请重试", Toast.LENGTH_LONG).show();
+            }
         }
     }
 

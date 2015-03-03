@@ -83,39 +83,20 @@ public class QueueFragment extends Fragment {
         checkQueuedQueue();
     }
 
-    private int getNowQueuer() {
-        int queueId = PreferenceManager.getDefaultSharedPreferences(getActivity())
-                .getInt(getString(R.string.queued_queue), -1);
-        if (queueId != -1) {
-            String result = null;
-            String fetchUrl = getString(R.string.root_url) + "getnowqueuer.php";
-            String url = Uri.parse(fetchUrl).buildUpon()
-                    .appendQueryParameter("queueId", String.valueOf(queueId))
-                    .build().toString();
-            Log.d(TAG, url);
-            try {
-                result = new DataFetcher(getActivity()).getUrl(url);
-                return Integer.valueOf(result);
-            } catch (IOException ioe) {
-                Log.e(TAG, "Failed to fetch URL: ", ioe);
-                return -1;
-            } catch (NumberFormatException nfe) {
-                return -1;
-            }
-        }
-        return -1;
-    }
-
     private class getNowQueuerTask extends AsyncTask<Void, Void, Integer> {
         @Override
         protected Integer doInBackground(Void... params) {
-            return getNowQueuer();
+            int queueId = PreferenceManager.getDefaultSharedPreferences(getActivity())
+                    .getInt(getString(R.string.queued_queue), -1);
+            return new DataFetcher(getActivity()).fetchNowQueuer(queueId);
         }
 
         @Override
         protected void onPostExecute(Integer integer) {
             if (integer != -1) {
                 mQueueNowTextView.setText(String.valueOf(integer));
+            } else {
+                Toast.makeText(getActivity(), "排队更新失败，请重试", Toast.LENGTH_LONG).show();
             }
         }
     }

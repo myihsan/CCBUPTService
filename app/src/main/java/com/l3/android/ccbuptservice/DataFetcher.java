@@ -124,4 +124,45 @@ public class DataFetcher {
             queues.add(queue);
         }
     }
+
+    public boolean fetchQueueDetail(Queue queue){
+        String fetchUrl = mContext.getString(R.string.root_url)+"getqueuedetail.php";
+        String url = Uri.parse(fetchUrl).buildUpon()
+                .appendQueryParameter("queueId", String.valueOf(queue.getId()))
+                .build().toString();
+        try {
+            String result = getUrl(url);
+            JSONObject jsonObject = new JSONObject(result);
+            queue.setNextNumber(jsonObject.getInt("nextNumber"));
+            queue.setTotal(jsonObject.getInt("total"));
+        } catch (IOException ioe) {
+            Log.e(TAG, "Failed to fetch URL: ", ioe);
+            return false;
+        } catch (JSONException jsone) {
+            Log.e(TAG, "Failed to parse detail", jsone);
+            return false;
+        }
+        return true;
+    }
+
+    public int fetchNowQueuer(int queueId) {
+        if (queueId != -1) {
+            String result = null;
+            String fetchUrl = mContext.getString(R.string.root_url) + "getnowqueuer.php";
+            String url = Uri.parse(fetchUrl).buildUpon()
+                    .appendQueryParameter("queueId", String.valueOf(queueId))
+                    .build().toString();
+            Log.d(TAG, url);
+            try {
+                result = getUrl(url);
+                return Integer.valueOf(result);
+            } catch (IOException ioe) {
+                Log.e(TAG, "Failed to fetch URL: ", ioe);
+                return -1;
+            } catch (NumberFormatException nfe) {
+                return -1;
+            }
+        }
+        return -1;
+    }
 }
