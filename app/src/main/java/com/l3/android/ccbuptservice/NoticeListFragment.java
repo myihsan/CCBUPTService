@@ -63,12 +63,6 @@ public class NoticeListFragment extends Fragment {
         mFrame.setDurationToCloseHeader(1000);
         mFrame.setHeaderView(header);
         mFrame.addPtrUIHandler(header);
-        mFrame.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mFrame.autoRefresh(false);
-            }
-        }, 100);
 
         mFrame.setPtrHandler(new PtrHandler() {
             @Override
@@ -81,8 +75,6 @@ public class NoticeListFragment extends Fragment {
                 new FetchNoticeTask().execute();
             }
         });
-
-//        new FetchNoticeTask().execute();
         return view;
     }
 
@@ -91,12 +83,7 @@ public class NoticeListFragment extends Fragment {
         super.onResume();
         if (mListView != null) {
             mListView.setStackFromBottom(false);
-            mFrame.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    mFrame.autoRefresh(true);
-                }
-            }, 150);
+            mFrame.autoRefresh(true);
         }
     }
 

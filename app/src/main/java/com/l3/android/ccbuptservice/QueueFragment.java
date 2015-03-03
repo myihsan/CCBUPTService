@@ -22,6 +22,11 @@ import com.tencent.android.tpush.XGPushConfig;
 
 import java.io.IOException;
 
+import in.srain.cube.views.ptr.PtrDefaultHandler;
+import in.srain.cube.views.ptr.PtrFrameLayout;
+import in.srain.cube.views.ptr.PtrHandler;
+import in.srain.cube.views.ptr.header.MaterialHeader;
+
 /**
  * Created by Ihsan on 15/2/5.
  */
@@ -33,6 +38,7 @@ public class QueueFragment extends Fragment {
     private TextView mMyNumberTextView, mMyIdentificationTextView, mQueueNowTextView;
     private FloatingActionButton mFAButton;
     private Button mQuitButton;
+    private PtrFrameLayout mFrame;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -60,7 +66,36 @@ public class QueueFragment extends Fragment {
         });
 
         mQueuedLinearLayout.setVisibility(View.INVISIBLE);
+
+        mFrame = (PtrFrameLayout) view.findViewById(R.id.queue_material_style_ptr_frame);
+
+        // header
+        final MaterialHeader header = new MaterialHeader(getActivity());
+        int[] colors = getResources().getIntArray(R.array.header_colors);
+        header.setColorSchemeColors(colors);
+        header.setLayoutParams(new PtrFrameLayout.LayoutParams(-1, -2));
+        header.setPadding(0, DisplayUtil.dp2px(getActivity(), 10), 0, DisplayUtil.dp2px(getActivity(), 10));
+        header.setPtrFrameLayout(mFrame);
+
+        mFrame.setLoadingMinTime(1000);
+        mFrame.setDurationToCloseHeader(1000);
+        mFrame.setHeaderView(header);
+        mFrame.addPtrUIHandler(header);
+
+        mFrame.setPtrHandler(new PtrHandler() {
+            @Override
+            public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
+                return PtrDefaultHandler.checkContentCanBePulledDown(frame, content, header);
+            }
+
+            @Override
+            public void onRefreshBegin(final PtrFrameLayout frame) {
+                new GetNowQueuerTask().execute();
+            }
+        });
+
         checkQueuedQueue();
+
         return view;
     }
 
@@ -74,7 +109,15 @@ public class QueueFragment extends Fragment {
             mMyNumberTextView.setText(String.valueOf(
                     pre.getInt(getString(R.string.queued_number), -1)));
             mMyIdentificationTextView.setText(XGPushConfig.getToken(getActivity()));
-            new getNowQueuerTask().execute();
+            mFrame.autoRefresh(true);
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(mQueuedLinearLayout.getVisibility()==View.VISIBLE) {
+            mFrame.autoRefresh(true);
         }
     }
 
@@ -83,7 +126,7 @@ public class QueueFragment extends Fragment {
         checkQueuedQueue();
     }
 
-    private class getNowQueuerTask extends AsyncTask<Void, Void, Integer> {
+    private class GetNowQueuerTask extends AsyncTask<Void, Void, Integer> {
         @Override
         protected Integer doInBackground(Void... params) {
             int queueId = PreferenceManager.getDefaultSharedPreferences(getActivity())
@@ -93,6 +136,7 @@ public class QueueFragment extends Fragment {
 
         @Override
         protected void onPostExecute(Integer integer) {
+            mFrame.refreshComplete();
             if (integer != -1) {
                 mQueueNowTextView.setText(String.valueOf(integer));
             } else {
