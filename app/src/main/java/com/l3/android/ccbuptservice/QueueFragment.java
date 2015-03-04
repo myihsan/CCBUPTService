@@ -34,7 +34,6 @@ public class QueueFragment extends Fragment {
     private static final String TAG = "QueueFragment";
     private static final int CHOOSE_QUEUE = 1;
 
-    private LinearLayout mQueuedLinearLayout;
     private TextView mMyNumberTextView, mMyIdentificationTextView, mQueueNowTextView;
     private FloatingActionButton mFAButton;
     private Button mQuitButton;
@@ -44,7 +43,6 @@ public class QueueFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_queue, container, false);
 
-        mQueuedLinearLayout = (LinearLayout) view.findViewById(R.id.queue_queued_linearLayout);
         mMyNumberTextView = (TextView) view.findViewById(R.id.queue_my_number_textView);
         mMyIdentificationTextView = (TextView) view.findViewById(R.id.queue_my_identification);
         mQueueNowTextView = (TextView) view.findViewById(R.id.queue_now_textView);
@@ -65,9 +63,10 @@ public class QueueFragment extends Fragment {
             }
         });
 
-        mQueuedLinearLayout.setVisibility(View.INVISIBLE);
 
         mFrame = (PtrFrameLayout) view.findViewById(R.id.queue_material_style_ptr_frame);
+
+        mFrame.setVisibility(View.INVISIBLE);
 
         // header
         final MaterialHeader header = new MaterialHeader(getActivity());
@@ -105,7 +104,7 @@ public class QueueFragment extends Fragment {
         if (pre.contains(getString(R.string.queued_number))
                 && pre.contains(getString(R.string.queued_queue))) {
             mFAButton.setVisibility(View.INVISIBLE);
-            mQueuedLinearLayout.setVisibility(View.VISIBLE);
+            mFrame.setVisibility(View.VISIBLE);
             mMyNumberTextView.setText(String.valueOf(
                     pre.getInt(getString(R.string.queued_number), -1)));
             mMyIdentificationTextView.setText(XGPushConfig.getToken(getActivity()));
@@ -116,7 +115,7 @@ public class QueueFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if(mQueuedLinearLayout.getVisibility()==View.VISIBLE) {
+        if (mFrame.getVisibility() == View.VISIBLE) {
             mFrame.autoRefresh(true);
         }
     }
@@ -148,29 +147,12 @@ public class QueueFragment extends Fragment {
     private class QuitQueueTask extends AsyncTask<Void, Void, Boolean> {
         @Override
         protected Boolean doInBackground(Void... params) {
-            boolean flag = false;
             int queueId = PreferenceManager
                     .getDefaultSharedPreferences(getActivity())
                     .getInt(getString(R.string.queued_queue), -1);
             int number = Integer.valueOf(mMyNumberTextView.getText().toString());
             String token = XGPushConfig.getToken(getActivity());
-            String fetchUrl = getString(R.string.root_url) + "quitqueue.php";
-            String url = Uri.parse(fetchUrl).buildUpon()
-                    .appendQueryParameter("queueId", String.valueOf(queueId))
-                    .appendQueryParameter("number", String.valueOf(number))
-                    .appendQueryParameter("token", token)
-                    .build().toString();
-            Log.d(TAG, url);
-            try {
-                String result = new DataFetcher(getActivity()).getUrl(url);
-                Log.d(TAG, result);
-                if (result.equals("succeed")) {
-                    flag = true;
-                }
-            } catch (IOException ioe) {
-                Log.e(TAG, "Failed to fetch URL: ", ioe);
-            }
-            return flag;
+            return new DataFetcher(getActivity()).fetchQuitQueueResult(queueId,number,token);
         }
 
         @Override
@@ -181,7 +163,7 @@ public class QueueFragment extends Fragment {
                         .remove(getString(R.string.queued_queue))
                         .remove(getString(R.string.queued_number))
                         .commit();
-                mQueuedLinearLayout.setVisibility(View.INVISIBLE);
+                mFrame.setVisibility(View.INVISIBLE);
                 mFAButton.setVisibility(View.VISIBLE);
             } else {
                 Toast.makeText(getActivity(), "处理失败，请重试", Toast.LENGTH_LONG).show();

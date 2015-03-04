@@ -165,4 +165,25 @@ public class DataFetcher {
         }
         return -1;
     }
+
+    public boolean fetchQuitQueueResult(int queueId,int number,String token) {
+        boolean flag = false;
+        String fetchUrl = mContext.getString(R.string.root_url) + "quitqueue.php";
+        String url = Uri.parse(fetchUrl).buildUpon()
+                .appendQueryParameter("queueId", String.valueOf(queueId))
+                .appendQueryParameter("number", String.valueOf(number))
+                .appendQueryParameter("token", token)
+                .build().toString();
+        Log.d(TAG, url);
+        try {
+            String result = getUrl(url);
+            Log.d(TAG, result);
+            if (result.equals("succeed")) {
+                flag = true;
+            }
+        } catch (IOException ioe) {
+            Log.e(TAG, "Failed to fetch URL: ", ioe);
+        }
+        return flag;
+    }
 }

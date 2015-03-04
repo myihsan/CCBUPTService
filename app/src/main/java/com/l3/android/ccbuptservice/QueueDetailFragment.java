@@ -106,7 +106,9 @@ public class QueueDetailFragment extends Fragment {
         @Override
         protected void onPostExecute(Boolean aBoolean) {
             if (aBoolean) {
-                mNowTextView.setText(String.valueOf(mQueue.getNextNumber()));
+                if (mQueue.getNextNumber() != 0) {
+                    mNowTextView.setText(String.valueOf(mQueue.getNextNumber()));
+                }
                 mTotalTextView.setText(String.valueOf(mQueue.getTotal()));
             } else {
                 Toast.makeText(getActivity(), "获取队列信息失败，请重试", Toast.LENGTH_LONG).show();
