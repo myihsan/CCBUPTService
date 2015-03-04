@@ -186,4 +186,22 @@ public class DataFetcher {
         }
         return flag;
     }
+
+    public int fetchQueueUpResult(int queueId, String token) {
+        String fetchUrl = mContext.getString(R.string.root_url) + "queueup.php";
+        String url = Uri.parse(fetchUrl).buildUpon()
+                .appendQueryParameter("queueId", String.valueOf(queueId))
+                .appendQueryParameter("token", token)
+                .build().toString();
+        try {
+            String result = getUrl(url);
+            Log.d(TAG, result);
+            return Integer.valueOf(result);
+        } catch (IOException ioe) {
+            Log.e(TAG, "Failed to fetch URL: ", ioe);
+        } catch (NumberFormatException nfe) {
+            return -1;
+        }
+        return -1;
+    }
 }

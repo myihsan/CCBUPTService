@@ -79,24 +79,6 @@ public class QueueDetailFragment extends Fragment {
         return view;
     }
 
-    private int queueUp(int queueId, String token) {
-        String fetchUrl = getString(R.string.root_url) + "queueup.php";
-        String url = Uri.parse(fetchUrl).buildUpon()
-                .appendQueryParameter("queueId", String.valueOf(queueId))
-                .appendQueryParameter("token", token)
-                .build().toString();
-        try {
-            String result = new DataFetcher(getActivity()).getUrl(url);
-            Log.d(TAG, result);
-            return Integer.valueOf(result);
-        } catch (IOException ioe) {
-            Log.e(TAG, "Failed to fetch URL: ", ioe);
-        } catch (NumberFormatException nfe) {
-            return -1;
-        }
-        return -1;
-    }
-
     private class GetDetailTask extends AsyncTask<Void, Void, Boolean> {
         @Override
         protected Boolean doInBackground(Void... params) {
@@ -121,7 +103,7 @@ public class QueueDetailFragment extends Fragment {
         protected Integer doInBackground(Void... params) {
             int queueId = mQueue.getId();
             String token = XGPushConfig.getToken(getActivity());
-            return queueUp(queueId, token);
+            return new DataFetcher(getActivity()).fetchQueueUpResult(queueId, token);
         }
 
         @Override
