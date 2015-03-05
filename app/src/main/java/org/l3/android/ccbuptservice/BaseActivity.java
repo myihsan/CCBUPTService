@@ -1,4 +1,4 @@
-package com.l3.android.ccbuptservice;
+package org.l3.android.ccbuptservice;
 
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;

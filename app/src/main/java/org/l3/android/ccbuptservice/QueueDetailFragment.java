@@ -1,14 +1,12 @@
-package com.l3.android.ccbuptservice;
+package org.l3.android.ccbuptservice;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,11 +15,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.tencent.android.tpush.XGPushConfig;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
 
 /**
  * Created by Ihsan on 15/2/5.

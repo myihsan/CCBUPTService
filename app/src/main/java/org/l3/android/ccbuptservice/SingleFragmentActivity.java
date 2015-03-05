@@ -1,10 +1,8 @@
-package com.l3.android.ccbuptservice;
+package org.l3.android.ccbuptservice;
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 
 /**
  * Created by Ihsan on 15/1/11.

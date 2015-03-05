@@ -1,4 +1,4 @@
-package com.l3.android.ccbuptservice;
+package org.l3.android.ccbuptservice;
 
 import android.content.Context;
 

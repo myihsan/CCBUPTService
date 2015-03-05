@@ -1,11 +1,10 @@
-package com.l3.android.ccbuptservice;
+package org.l3.android.ccbuptservice;
 
 import android.app.Activity;
 import android.app.ListFragment;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
