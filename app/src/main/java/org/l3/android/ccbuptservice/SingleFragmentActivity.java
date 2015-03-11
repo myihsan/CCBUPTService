@@ -9,7 +9,7 @@ import android.os.Bundle;
  */
 public abstract class SingleFragmentActivity extends BaseActivity {
 
-    protected abstract android.app.Fragment createFragment();
+    protected abstract Fragment createFragment();
 
     protected int getLayoutResId() {
         return R.layout.activity_fragment;

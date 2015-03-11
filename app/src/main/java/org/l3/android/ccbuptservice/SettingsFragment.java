@@ -11,20 +11,27 @@ import com.tencent.android.tpush.XGPushManager;
 
 public class SettingsFragment extends PreferenceFragment implements
         Preference.OnPreferenceChangeListener {
-    private ListPreference specialty;
-    private String oldSpecialty;
+    private ListPreference mSpecialty, mGrade;
+    private String mOldSpecialty, mOldGrade;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         addPreferencesFromResource(R.xml.fragment_settings);
-        specialty = (ListPreference) findPreference("specialty");
-        oldSpecialty = specialty.getValue();
-        if (oldSpecialty != null) {
-            specialty.setSummary(oldSpecialty);
+        mSpecialty = (ListPreference) findPreference("specialty");
+        mOldSpecialty = mSpecialty.getValue();
+        if (mOldSpecialty != null) {
+            mSpecialty.setSummary(mOldSpecialty);
         }
-        specialty.setOnPreferenceChangeListener(this);
+        mSpecialty.setOnPreferenceChangeListener(this);
+
+        mGrade = (ListPreference) findPreference("grade");
+        mOldGrade = mGrade.getValue();
+        if (mOldGrade != null) {
+            mGrade.setSummary(mOldGrade);
+        }
+        mGrade.setOnPreferenceChangeListener(this);
     }
 
     @Override
@@ -42,14 +49,26 @@ public class SettingsFragment extends PreferenceFragment implements
 
     @Override
     public boolean onPreferenceChange(Preference preference, Object objValue) {
-        if (preference == specialty) {
+        if (preference == mSpecialty) {
             String newSpecialty = String.valueOf(objValue);
-            specialty.setSummary(newSpecialty);
-            if (oldSpecialty != null) {
-				XGPushManager.deleteTag(getActivity().getApplicationContext(), oldSpecialty);
+            mSpecialty.setSummary(newSpecialty);
+            if (mOldGrade!=null) {
+                XGPushManager.setTag(getActivity().getApplicationContext(), mOldGrade+newSpecialty);
+                if (mOldSpecialty != null) {
+                    XGPushManager.deleteTag(getActivity().getApplicationContext(), mOldGrade+mOldSpecialty);
+                }
             }
-			XGPushManager.setTag(getActivity().getApplicationContext(), newSpecialty);
-            oldSpecialty = newSpecialty;
+            mOldSpecialty = newSpecialty;
+        }else if (preference==mGrade){
+            String newGrade = String.valueOf(objValue);
+            mGrade.setSummary(newGrade);
+            if (mOldSpecialty!=null) {
+                XGPushManager.setTag(getActivity().getApplicationContext(), newGrade+mOldSpecialty);
+                if (mOldGrade != null) {
+                    XGPushManager.deleteTag(getActivity().getApplicationContext(), mOldGrade+mOldSpecialty);
+                }
+            }
+            mOldGrade = newGrade;
         }
         return true;
     }

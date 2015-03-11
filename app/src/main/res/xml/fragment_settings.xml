@@ -2,11 +2,18 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <ListPreference
-        android:entries="@array/department_options"
-        android:entryValues="@array/department_options"
+        android:entries="@array/specialty_options"
+        android:entryValues="@array/specialty_options"
         android:key="specialty"
         android:persistent="true"
         android:title="专业"
-        android:summary="未选择专业无法收到针对院系的通知"/>
+        android:summary="请选择专业"/>
+    <ListPreference
+        android:entries="@array/grade_options"
+        android:entryValues="@array/grade_options"
+        android:key="grade"
+        android:persistent="true"
+        android:title="年级"
+        android:summary="请选择年级"/>
 
 </PreferenceScreen>

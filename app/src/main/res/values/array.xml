@@ -5,13 +5,30 @@
         <item>通知</item>
         <item>设置</item>
     </string-array>
-    <string-array name="department_options">
-        <item>计算机科学与技术系</item>
-        <item>经济管理系</item>
-        <item>艺术与传媒学院</item>
-        <item>外语系</item>
-        <item>通信与信息工程系</item>
-        <item>电子与自动化系</item>
+    <string-array name="specialty_options">
+        <item>通信工程</item>
+        <item>电子信息工程</item>
+        <item>物联网工程</item>
+        <item>机械电子工程</item>
+        <item>物流工程</item>
+        <item>电子科学与技术</item>
+        <item>机械电子工程</item>
+        <item>计算机科学与技术</item>
+        <item>软件工程</item>
+        <item>市场营销</item>
+        <item>电子商务</item>
+        <item>财务管理</item>
+        <item>财务管理（国际注册会计师）</item>
+        <item>英语</item>
+        <item>数字媒体技术</item>
+        <item>数字媒体艺术</item>
+        <item>传播学</item>
+    </string-array>
+    <string-array name="grade_options">
+        <item>2011</item>
+        <item>2012</item>
+        <item>2013</item>
+        <item>2014</item>
     </string-array>
 
 
