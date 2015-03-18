@@ -97,9 +97,12 @@ public class NoticeListFragment extends Fragment {
             SharedPreferences preferences = PreferenceManager
                     .getDefaultSharedPreferences(getActivity());
             String specialty;
+            String grade;
             if (preferences.contains("specialty")
-                    && (specialty = preferences.getString("specialty", null).toString()) != null) {
-                return new DataFetcher(getActivity()).fetchNoticeBySpecialty(specialty);
+                    && (specialty = preferences.getString("specialty", null).toString()) != null
+                    && preferences.contains("grade")
+                    && (grade = preferences.getString("grade", null).toString()) != null) {
+                return new DataFetcher(getActivity()).fetchNoticeBySpecialty(grade+specialty);
             } else {
                 return new DataFetcher(getActivity()).fetchNotice();
             }

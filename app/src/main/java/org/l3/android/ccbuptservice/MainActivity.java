@@ -39,30 +39,23 @@ public class MainActivity extends BaseActivity implements MaterialTabListener {
 
         // 开启logcat输出，方便debug，发布时请关闭
         XGPushConfig.enableDebug(this, true);
-        // 如果需要知道注册是否成功，请使用registerPush(getApplicationContext(), XGIOperateCallback)带callback版本
-        // 如果需要绑定账号，请使用registerPush(getApplicationContext(),account)版本
-        // 具体可参考详细的开发指南
-        // 传递的参数为ApplicationContext
-        Context context = getApplicationContext();
-        boolean xgIsRegistered = PreferenceManager.getDefaultSharedPreferences(this)
-                .getBoolean(getString(R.string.xg_is_registered), false);
-        if (!xgIsRegistered) {
-            XGPushManager.registerPush(context, new XGIOperateCallback() {
-                @Override
-                public void onSuccess(Object data, int flag) {
-                    PreferenceManager.getDefaultSharedPreferences(MainActivity.this)
-                            .edit()
-                            .putBoolean(getString(R.string.xg_is_registered), true)
-                            .commit();
-                    Log.d("TPush", "注册成功，设备token为：" + data);
-                }
 
-                @Override
-                public void onFail(Object data, int errCode, String msg) {
-                    Log.d("TPush", "注册失败，错误码：" + errCode + ",错误信息：" + msg);
-                }
-            });
-        }
+        Context context = getApplicationContext();
+        XGPushManager.registerPush(context, new XGIOperateCallback() {
+            @Override
+            public void onSuccess(Object data, int flag) {
+                PreferenceManager.getDefaultSharedPreferences(MainActivity.this)
+                        .edit()
+                        .putBoolean(getString(R.string.xg_is_registered), true)
+                        .commit();
+                Log.d("TPush", "注册成功，设备token为：" + data);
+            }
+
+            @Override
+            public void onFail(Object data, int errCode, String msg) {
+                Log.d("TPush", "注册失败，错误码：" + errCode + ",错误信息：" + msg);
+            }
+        });
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
@@ -175,7 +168,7 @@ public class MainActivity extends BaseActivity implements MaterialTabListener {
                 case 0:
                     return "通知";
                 case 1:
-                    return "排队";
+                    return "队列";
             }
             return null;
         }
